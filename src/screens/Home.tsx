@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import LoadingView from "../components/LoadingView";
 import SearchInput from "../components/SearchInput";
 import UserTypeSelector from "../components/UserTypeSelector";
-import CsvDownloader from "react-csv-downloader";
 
 import { FaFemale, FaMale, FaUsers } from "react-icons/fa";
 import CountrySelector from "../components/CountrySelector";
@@ -33,7 +32,6 @@ function Home() {
   const [showCountry, setShowCountry] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +46,6 @@ function Home() {
       if (response?.success) {
         setUserData(response?.data);
         setFilteredUserData(response?.data);
-        setTotalPages(Math.ceil(response?.data?.length / PAGE_SIZE));
       } else {
         console.log("Something went wrong here --> ", response);
       }
@@ -174,7 +171,7 @@ function Home() {
           id="results"
         >
           <div className="flex flex-col w-full justify-start md:justify-center">
-            <h1 className="text-lg md:text-xl lg:text-2xl text-black text-center lg:text-left font-bold font-poppins">
+            <h1 className="capitalize text-lg md:text-xl lg:text-2xl text-black text-center lg:text-left font-bold font-poppins">
               {userFilter}
             </h1>
             <span className="text-xs text-center lg:text-left">Filter By</span>

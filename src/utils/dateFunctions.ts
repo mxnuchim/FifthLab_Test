@@ -1,6 +1,10 @@
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString);
-  const options = { day: "numeric", month: "long", year: "numeric" };
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  };
   const formattedDate = date.toLocaleDateString("en-US", options);
 
   // Add ordinal suffix to the day
