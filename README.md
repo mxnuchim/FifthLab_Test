@@ -1,31 +1,71 @@
-# React + TypeScript + Vite
+# FifthLab Frontend Developer Assessment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction
 
-Currently, two official plugins are available:
+This project is part of the FifthLab Frontend Developer Assessment, aimed at testing proficiency in frontend development using React, JavaScript/TypeScript, Axios, and Jest/Mocha. The goal is to replicate a web page design, make it responsive, consume APIs, and write unit tests.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Webpage to Replicate
 
-## Expanding the ESLint configuration
+The replicated website and my submission can be found [here](https://fifth-lab-test.vercel.app/).
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technologies Used
 
-- Configure the top-level `parserOptions` property like this:
+- React
+- JavaScript/TypeScript
+- Axios
+- Jest (for unit testing)
+- TailwindCSS
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## Features
+
+- Replicate the design of the provided webpage
+- Make the webpage responsive for desktop and mobile screen sizes
+- Consume the Random User API from [randomuser.me](https://randomuser.me)
+- Implement functionality for user search, filter by gender, download users, and pagination
+- Write unit tests for as many features as possible
+
+## Installation and Usage
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/your-repo.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd your-repo
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+    #or
+    yarn install
+   ```
+
+4. Run the application:
+
+   ```bash
+   npm run dev
+    # or
+    yarn dev
+   ```
+
+5. Open your browser and visit http://localhost:5173/ to view the application.
+
+## Testing
+
+To run unit tests, use the following command:
+
+```bash
+npm run test
+# or
+yarn test
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-# FifthLab_Test
+## Deployment
+
+The project is deployed using [Vercel](https://vercel.com/) at [Deployment Link](https://fifth-lab-test.vercel.app/).
