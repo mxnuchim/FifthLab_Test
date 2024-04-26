@@ -26,7 +26,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onBackClick }) => {
           <img
             src={user?.picture?.large}
             alt={user?.name?.first}
-            className="rounded-full border-[5px] border-customGreen h-44 xl:h-44 w-44 xl:w-52 object-cover"
+            className="rounded-full border-[5px] border-customGreen h-44 xl:h-52 w-44 xl:w-52 object-cover"
           />
         </div>
         <div className="flex flex-col items-center justify-center w-full xl:w-fit">
