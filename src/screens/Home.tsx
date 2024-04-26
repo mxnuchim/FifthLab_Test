@@ -18,7 +18,6 @@ import {
   IoIosCloudDownload,
 } from "react-icons/io";
 import { fetchUsers } from "../services/api";
-import jsPDF from "jspdf";
 
 const PAGE_SIZE = 3;
 
@@ -60,6 +59,22 @@ function Home() {
       fetchData();
     }
   }, [currentPage]);
+
+  useEffect(() => {
+    // Function to filter user data based on gender
+    const filterUserData = () => {
+      if (userFilter.toLowerCase() === "all users") {
+        setFilteredUserData(userData); // No filter applied, show all users
+      } else {
+        const filteredData = userData.filter(
+          (user) => user.gender.toLowerCase() === userFilter.toLowerCase()
+        );
+        setFilteredUserData(filteredData);
+      }
+    };
+
+    filterUserData();
+  }, [userFilter, userData]);
 
   const nextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
@@ -230,16 +245,19 @@ function Home() {
                 icon={<FaUsers size={40} color="#fff" />}
                 description="All Users"
                 className="bg-customPink"
+                onClick={() => setUserFilter("All Users")}
               />
               <UserTypeSelector
                 icon={<FaMale size={40} color="#fff" />}
                 description="Male Users"
                 className="bg-customGreen"
+                onClick={() => setUserFilter("male")}
               />
               <UserTypeSelector
                 icon={<FaFemale size={40} color="#fff" />}
                 description="Female Users"
                 className="bg-customPurple"
+                onClick={() => setUserFilter("female")}
               />
             </div>
           </div>
