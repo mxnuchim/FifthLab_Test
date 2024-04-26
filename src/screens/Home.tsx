@@ -46,6 +46,7 @@ function Home() {
       if (response?.success) {
         setUserData(response?.data);
         setFilteredUserData(response?.data);
+        setTotalPages(Math.ceil(response?.data?.length / PAGE_SIZE));
       } else {
         console.log("Something went wrong here --> ", response);
       }
@@ -58,12 +59,24 @@ function Home() {
     }
   }, [currentPage]);
 
+  const nextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
+  };
+
   const handleSearch = (searchTerm: string) => {
     console.log(searchTerm);
     setSearchTerm(searchTerm);
 
-    const filteredUsers = userData?.filter((user: IUser) =>
-      user.name.first.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredUsers = userData?.filter(
+      (user: IUser) =>
+        user.name.first.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.name.last.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     setFilteredUserData(filteredUsers);
@@ -189,10 +202,11 @@ function Home() {
               </p>
             </div>
 
+            {/** PAGINATION BUTTONS */}
             <div className="flex items-center justify-end gap-2">
               <div
                 className="cursor-pointer flex items-center justify-end gap-2"
-                onClick={() => {}} // Go to prev page
+                onClick={prevPage}
               >
                 <div className="bg-gray-300 drop-shadow-md h-12 w-16 flex items-center justify-center rounded-xl">
                   <IoIosArrowBack size={20} className="text-black" />
@@ -201,7 +215,7 @@ function Home() {
 
               <div
                 className="cursor-pointer flex items-center justify-end gap-2"
-                onClick={() => {}} // Go to next page
+                onClick={nextPage}
               >
                 <div className="bg-black drop-shadow-md h-12 w-16 flex items-center justify-center rounded-xl">
                   <IoIosArrowForward size={20} className="text-white" />
