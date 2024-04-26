@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import LoadingView from "../components/LoadingView";
 import SearchInput from "../components/SearchInput";
 import UserTypeSelector from "../components/UserTypeSelector";
+import CsvDownloader from "react-csv-downloader";
 
 import { FaFemale, FaMale, FaUsers } from "react-icons/fa";
 import CountrySelector from "../components/CountrySelector";
@@ -17,6 +18,7 @@ import {
   IoIosCloudDownload,
 } from "react-icons/io";
 import { fetchUsers } from "../services/api";
+import jsPDF from "jspdf";
 
 const PAGE_SIZE = 3;
 
@@ -70,7 +72,7 @@ function Home() {
   };
 
   const handleSearch = (searchTerm: string) => {
-    console.log(searchTerm);
+    // console.log(searchTerm);
     setSearchTerm(searchTerm);
 
     const filteredUsers = userData?.filter(
@@ -97,6 +99,63 @@ function Home() {
     );
 
     setFilteredUserData(filteredUsers);
+  };
+
+  const downloadCSV = () => {
+    const csvContent = filteredUserData
+      ?.map((data) => {
+        const values = [
+          data.gender,
+          data.name.title,
+          data.name.first,
+          data.name.last,
+          data.location.street.number,
+          data.location.street.name,
+          data.location.city,
+          data.location.state,
+          data.location.country,
+          data.location.postcode,
+          data.location.coordinates.latitude,
+          data.location.coordinates.longitude,
+          data.location.timezone.offset,
+          data.location.timezone.description,
+          data.email,
+          data.login.uuid,
+          data.login.username,
+          data.login.password,
+          data.login.salt,
+          data.login.md5,
+          data.login.sha1,
+          data.login.sha256,
+          data.dob.date,
+          data.dob.age,
+          data.registered.date,
+          data.registered.age,
+          data.phone,
+          data.cell,
+          data.id.name,
+          data.id.value,
+          data.picture.large,
+          data.picture.medium,
+          data.picture.thumbnail,
+          data.nat,
+        ];
+
+        return values
+          .map((value) => (value !== undefined ? value : ""))
+          .join(",");
+      })
+      .join("\n");
+
+    // Create a Blob and download the CSV file
+    const blob = new Blob([csvContent ?? ""], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "user_data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -148,7 +207,10 @@ function Home() {
           </div>
         </div>
 
-        <div className="bg-customLightGray rounded-3xl w-full px-8 pt-8 py-8 md:pt-32">
+        <div
+          className="bg-customLightGray rounded-3xl w-full px-8 pt-8 py-8 md:pt-32"
+          id="results"
+        >
           <div className="flex flex-col w-full justify-start md:justify-center">
             <h1 className="text-lg md:text-xl lg:text-2xl text-black text-center lg:text-left font-bold font-poppins">
               {userFilter}
@@ -195,7 +257,11 @@ function Home() {
           </div>
 
           <div className="h-5 w-full flex items-center justify-between">
-            <div className="flex items-center justify-start gap-2 px-6 py-3 w-48 bg-customPurple rounded-full">
+            {/** DOWNLOAD PDF */}
+            <div
+              onClick={downloadCSV}
+              className="cursor-pointer flex items-center justify-start gap-2 px-6 py-3 w-48 bg-customPurple rounded-full"
+            >
               <IoIosCloudDownload size={20} className="text-white" />
               <p className="whitespace-nowrap text-white text-xs text-center lg:text-left font-roboto">
                 Download Results
