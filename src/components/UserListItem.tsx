@@ -3,13 +3,27 @@ import { IUser } from "../types";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiPhoneCall } from "react-icons/fi";
 import { IoMdArrowForward } from "react-icons/io";
+import { trimText } from "../utils/stringFunctions";
 
 interface UserListItemProps {
   user: IUser;
   onClick: () => void;
+  showCountry?: boolean;
 }
 
-const UserListItem: React.FC<UserListItemProps> = ({ user, onClick }) => {
+const UserListItem: React.FC<UserListItemProps> = ({
+  user,
+  onClick,
+  showCountry,
+}) => {
+  const locationString = trimText(
+    `${user?.location?.street?.number} ${user?.location?.street?.name} ${
+      user?.location?.city
+    }, ${user?.location?.state} ${
+      showCountry ? `, ${user?.location?.country}` : ""
+    }`,
+    57
+  );
   return (
     <div
       className="w-full cursor-pointer px-3 py-6 flex flex-col xl:flex-row gap-4 bg-white rounded-lg drop-shadow-xl"
@@ -19,13 +33,15 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, onClick }) => {
         <img
           src={user?.picture?.medium}
           alt={user?.name?.first}
-          className="rounded-full border-[6px] border-customGreen h-24 w-24 object-cover"
+          className="rounded-full border-[5px] border-customGreen h-24 w-24 object-cover"
         />
       </div>
       <div className="flex flex-col items-start justify-start gap-4">
         <div className="flex flex-col w-full">
-          <span className="font-bold text-xl text-center xl:text-left">{`${user.name.first} ${user.name.last}`}</span>
-          <p className="mt-1 italic text-black font-roboto font-thin text-base text-center xl:text-left">{`${user.location.street.number} ${user.location.street.name} ${user.location.city}, ${user.location.state}, ${user.location.country}`}</p>
+          <span className="font-bold text-xl text-center xl:text-left">{`${user.name.first} ${user?.name?.last}`}</span>
+          <p className="mt-1 italic text-black font-roboto font-thin text-base text-center xl:text-left">
+            {locationString}
+          </p>
         </div>
 
         <div className="flex flex-col xl:flex-row items-center justify-between  gap-4 w-full ">

@@ -15,7 +15,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user, onBackClick }) => {
     <div className="">
       <div
         onClick={onBackClick}
-        className="w-full h-10 bg-transparent flex items-center justify-start gap-2"
+        className="w-full h-10 bg-transparent flex cursor-pointer items-center justify-start gap-2"
       >
         <IoMdArrowBack size={24} className="text-customGreen" />
         <p className="text-sm text-left font-normal">Back to results</p>

@@ -5,10 +5,11 @@ import UserListItem from "./UserListItem";
 import UserProfile from "./UserProfile";
 
 interface UserListProps {
-  users: IUser[];
+  users: IUser[] | null;
+  showCountry?: boolean;
 }
 
-const UserList: React.FC<UserListProps> = ({ users }) => {
+const UserList: React.FC<UserListProps> = ({ users, showCountry }) => {
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
 
   const listSlideProps = useSpring({
@@ -31,11 +32,12 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
     <div className="user-list">
       {selectedUser ? null : (
         <animated.div className="flex flex-col gap-4" style={listSlideProps}>
-          {users.map((user, index) => (
+          {users?.map((user, index) => (
             <UserListItem
               key={index}
               user={user}
               onClick={() => handleUserClick(user)}
+              showCountry={showCountry}
             />
           ))}
         </animated.div>

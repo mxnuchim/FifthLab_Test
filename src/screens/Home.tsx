@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
@@ -17,41 +18,72 @@ import {
 } from "react-icons/io";
 import { fetchUsers } from "../services/api";
 
+const PAGE_SIZE = 3;
+
 function Home() {
   const [loading, setLoading] = useState(false);
   const [userFilter, setUserFilter] = useState("All Users");
-  const [userData, setUserData] = useState(null);
-  const [country, setCountry] = useState("All Users");
+  const [userData, setUserData] = useState<IUser[]>([]);
+  const [filteredUserData, setFilteredUserData] = useState<IUser[] | null>(
+    null
+  );
+  const [country, setCountry] = useState("");
   const [showCountry, setShowCountry] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-
-      const response = await fetchUsers({ page: 1, limit: 3 });
-      console.log("user data response --> ", response);
+      console.log({ currentPage, PAGE_SIZE });
+      const response = await fetchUsers({
+        page: currentPage,
+        limit: PAGE_SIZE,
+      });
+      console.log("user data response --> ", response?.data);
 
       if (response?.success) {
         setUserData(response?.data);
+        setFilteredUserData(response?.data);
       } else {
         console.log("Something went wrong here --> ", response);
       }
-
       setLoading(false);
     };
 
-    fetchData();
-  }, []);
+    console.log("current page --> ", currentPage);
+    if (currentPage > 0) {
+      fetchData();
+    }
+  }, [currentPage]);
 
   const handleSearch = (searchTerm: string) => {
-    // Handle search action with the search term
+    console.log(searchTerm);
     setSearchTerm(searchTerm);
-    console.log("Search term:", searchTerm);
+
+    const filteredUsers = userData?.filter((user: IUser) =>
+      user.name.first.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setFilteredUserData(filteredUsers);
   };
 
-  const handleSelectCountry = (country: string) => {
-    setCountry(country);
+  const handleSelectCountry = (selectedCountry: string) => {
+    console.log(selectedCountry);
+
+    if (selectedCountry === "") {
+      setFilteredUserData(userData);
+      setCountry("");
+      return;
+    }
+    setCountry(selectedCountry);
+
+    const filteredUsers = userData?.filter(
+      (user) => user?.location?.country === selectedCountry
+    );
+
+    setFilteredUserData(filteredUsers);
   };
 
   return (
@@ -138,7 +170,15 @@ function Home() {
           </div>
 
           <div className="my-16">
-            <UserList users={userData} />
+            {filteredUserData?.length ? (
+              <UserList users={filteredUserData} showCountry={showCountry} />
+            ) : (
+              <div className="flex w-full h-44 items-center justify-center">
+                <p className="font-sm text-gray-400 whitespace-nowrap">
+                  No users found
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="h-5 w-full flex items-center justify-between">
@@ -150,12 +190,22 @@ function Home() {
             </div>
 
             <div className="flex items-center justify-end gap-2">
-              <div className="bg-gray-300 drop-shadow-md h-12 w-16 flex items-center justify-center rounded-xl">
-                <IoIosArrowBack size={20} className="text-black" />
+              <div
+                className="cursor-pointer flex items-center justify-end gap-2"
+                onClick={() => {}} // Go to prev page
+              >
+                <div className="bg-gray-300 drop-shadow-md h-12 w-16 flex items-center justify-center rounded-xl">
+                  <IoIosArrowBack size={20} className="text-black" />
+                </div>
               </div>
 
-              <div className="bg-black drop-shadow-md h-12 w-16 flex items-center justify-center rounded-xl">
-                <IoIosArrowForward size={20} className="text-white" />
+              <div
+                className="cursor-pointer flex items-center justify-end gap-2"
+                onClick={() => {}} // Go to next page
+              >
+                <div className="bg-black drop-shadow-md h-12 w-16 flex items-center justify-center rounded-xl">
+                  <IoIosArrowForward size={20} className="text-white" />
+                </div>
               </div>
             </div>
           </div>
@@ -166,177 +216,3 @@ function Home() {
 }
 
 export default Home;
-
-const users: IUser[] = [
-  {
-    gender: "male",
-    name: {
-      title: "Mr",
-      first: "Vicente",
-      last: "Mendes",
-    },
-    location: {
-      street: {
-        number: 1933,
-        name: "Rua Amazonas ",
-      },
-      city: "Teixeira de Freitas",
-      state: "Paraíba",
-      country: "Brazil",
-      postcode: 12480,
-      coordinates: {
-        latitude: "-79.0943",
-        longitude: "-87.4446",
-      },
-      timezone: {
-        offset: "+5:45",
-        description: "Kathmandu",
-      },
-    },
-    email: "vicente.mendes@example.com",
-    login: {
-      uuid: "f9c31e80-d17e-49f1-b531-6d290442dc49",
-      username: "brownbird480",
-      password: "factory",
-      salt: "YdE3J8hE",
-      md5: "a27efc6580cce25fe3fcf40a9cc0e36e",
-      sha1: "943dc3f6cff10c4856d193392f82f7ff70e649d2",
-      sha256:
-        "fc4e0fc696f6a606624aee7ef1039ba670f802dc4055105a0ae90ea3c9124c13",
-    },
-    dob: {
-      date: "1992-07-31T11:44:57.731Z",
-      age: 31,
-    },
-    registered: {
-      date: "2005-03-05T14:04:50.031Z",
-      age: 19,
-    },
-    phone: "(03) 2188-3594",
-    cell: "(35) 9386-0708",
-    id: {
-      name: "CPF",
-      value: "762.800.017-93",
-    },
-    picture: {
-      large: "https://randomuser.me/api/portraits/men/56.jpg",
-      medium: "https://randomuser.me/api/portraits/med/men/56.jpg",
-      thumbnail: "https://randomuser.me/api/portraits/thumb/men/56.jpg",
-    },
-    nat: "BR",
-  },
-  {
-    gender: "male",
-    name: {
-      title: "Mr",
-      first: "Vicente",
-      last: "Mendes",
-    },
-    location: {
-      street: {
-        number: 1933,
-        name: "Rua Amazonas ",
-      },
-      city: "Teixeira de Freitas",
-      state: "Paraíba",
-      country: "Brazil",
-      postcode: 12480,
-      coordinates: {
-        latitude: "-79.0943",
-        longitude: "-87.4446",
-      },
-      timezone: {
-        offset: "+5:45",
-        description: "Kathmandu",
-      },
-    },
-    email: "vicente.mendes@example.com",
-    login: {
-      uuid: "f9c31e80-d17e-49f1-b531-6d290442dc49",
-      username: "brownbird480",
-      password: "factory",
-      salt: "YdE3J8hE",
-      md5: "a27efc6580cce25fe3fcf40a9cc0e36e",
-      sha1: "943dc3f6cff10c4856d193392f82f7ff70e649d2",
-      sha256:
-        "fc4e0fc696f6a606624aee7ef1039ba670f802dc4055105a0ae90ea3c9124c13",
-    },
-    dob: {
-      date: "1992-07-31T11:44:57.731Z",
-      age: 31,
-    },
-    registered: {
-      date: "2005-03-05T14:04:50.031Z",
-      age: 19,
-    },
-    phone: "(03) 2188-3594",
-    cell: "(35) 9386-0708",
-    id: {
-      name: "CPF",
-      value: "762.800.017-93",
-    },
-    picture: {
-      large: "https://randomuser.me/api/portraits/men/56.jpg",
-      medium: "https://randomuser.me/api/portraits/med/men/56.jpg",
-      thumbnail: "https://randomuser.me/api/portraits/thumb/men/56.jpg",
-    },
-    nat: "BR",
-  },
-  {
-    gender: "male",
-    name: {
-      title: "Mr",
-      first: "Vicente",
-      last: "Mendes",
-    },
-    location: {
-      street: {
-        number: 1933,
-        name: "Rua Amazonas ",
-      },
-      city: "Teixeira de Freitas",
-      state: "Paraíba",
-      country: "Brazil",
-      postcode: 12480,
-      coordinates: {
-        latitude: "-79.0943",
-        longitude: "-87.4446",
-      },
-      timezone: {
-        offset: "+5:45",
-        description: "Kathmandu",
-      },
-    },
-    email: "vicente.mendes@example.com",
-    login: {
-      uuid: "f9c31e80-d17e-49f1-b531-6d290442dc49",
-      username: "brownbird480",
-      password: "factory",
-      salt: "YdE3J8hE",
-      md5: "a27efc6580cce25fe3fcf40a9cc0e36e",
-      sha1: "943dc3f6cff10c4856d193392f82f7ff70e649d2",
-      sha256:
-        "fc4e0fc696f6a606624aee7ef1039ba670f802dc4055105a0ae90ea3c9124c13",
-    },
-    dob: {
-      date: "1992-07-31T11:44:57.731Z",
-      age: 31,
-    },
-    registered: {
-      date: "2005-03-05T14:04:50.031Z",
-      age: 19,
-    },
-    phone: "(03) 2188-3594",
-    cell: "(35) 9386-0708",
-    id: {
-      name: "CPF",
-      value: "762.800.017-93",
-    },
-    picture: {
-      large: "https://randomuser.me/api/portraits/men/56.jpg",
-      medium: "https://randomuser.me/api/portraits/med/men/56.jpg",
-      thumbnail: "https://randomuser.me/api/portraits/thumb/men/56.jpg",
-    },
-    nat: "BR",
-  },
-];
