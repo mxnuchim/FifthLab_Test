@@ -29,7 +29,7 @@ The replicated website and my submission can be found [here](https://fifth-lab-t
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
+   git clone https://github.com/mxnuchim/FifthLab_Test.git
    ```
 
 2. Navigate to the project directory:
