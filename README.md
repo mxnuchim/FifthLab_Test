@@ -18,11 +18,11 @@ The replicated website and my submission can be found [here](https://fifth-lab-t
 
 ## Features
 
-- Replicate the design of the provided webpage
-- Make the webpage responsive for desktop and mobile screen sizes
-- Consume the Random User API from [randomuser.me](https://randomuser.me)
-- Implement functionality for user search, filter by gender, download users, and pagination
-- Write unit tests for as many features as possible
+- A fully responsive, replicated design of the provided webpage
+- Full Responsiveness responsive for all screen sizes
+- Consumed the Random User API from [randomuser.me](https://randomuser.me)
+- Implement functionality for user search, filter by gender, download users, filter by country, and pagination
+- Write unit tests for the API call success case and error case
 
 ## Installation and Usage
 
@@ -35,7 +35,7 @@ The replicated website and my submission can be found [here](https://fifth-lab-t
 2. Navigate to the project directory:
 
    ```bash
-   cd your-repo
+   cd FifthLab_Test
    ```
 
 3. Install dependencies:
