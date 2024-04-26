@@ -102,7 +102,45 @@ function Home() {
   };
 
   const downloadCSV = () => {
-    const csvContent = filteredUserData
+    const headerRow = [
+      "Gender",
+      "Title",
+      "First Name",
+      "Last Name",
+      "Street Number",
+      "Street Name",
+      "City",
+      "State",
+      "Country",
+      "Postcode",
+      "Latitude",
+      "Longitude",
+      "Timezone Offset",
+      "Timezone Description",
+      "Email",
+      "UUID",
+      "Username",
+      "Password",
+      "Salt",
+      "MD5",
+      "SHA1",
+      "SHA256",
+      "DOB Date",
+      "DOB Age",
+      "Registered Date",
+      "Registered Age",
+      "Phone",
+      "Cell",
+      "ID Name",
+      "ID Value",
+      "Picture Large",
+      "Picture Medium",
+      "Picture Thumbnail",
+      "Nationality",
+    ];
+
+    // Convert user data to CSV format including headers
+    const csvContent = `${headerRow.join(",")}\n${filteredUserData
       ?.map((data) => {
         const values = [
           data.gender,
@@ -145,10 +183,10 @@ function Home() {
           .map((value) => (value !== undefined ? value : ""))
           .join(",");
       })
-      .join("\n");
+      .join("\n")}`;
 
     // Create a Blob and download the CSV file
-    const blob = new Blob([csvContent ?? ""], { type: "text/csv" });
+    const blob = new Blob([csvContent], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
